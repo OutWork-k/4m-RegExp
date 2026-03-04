@@ -28,18 +28,51 @@ button.addEventListener("click", function (e) {
 // }); // здесь я не использовал кнопку
 
 
-const block = document.querySelector(".child_block");
+const parent = document.querySelector(".parent_block");
+const child = document.querySelector(".child_block ");
 
-let position = 0;
+let positionX = 0 , positionY = 0;
 
-function moveRight() {
-  if (position >= 448) return; 
+const toRight = parent.clientWidth - child.clientWidth;
+const toBottom = parent.clientHeight - child.clientHeight;
 
-  position++;
-  block.style.left = position + "px";
-
-  setTimeout(moveRight, 5); 
+const moveBlock = () => {
+  requestAnimationFrame(moveBlock)
+  child.style.top = `${positionY}px`;
+  child.style.left = `${positionX}px`;
+  if (positionX < toRight && positionY === 0) positionX++;
+  else if (positionX >= toRight && positionY < toBottom) positionY++;
+  else if (positionY >= toBottom && positionX > 0) positionX--;
+  else if (positionX === 0 && positionY > 0) positionY--;
 }
+moveBlock()
+// Честно сказать чтобы квадрат двигался по кругу было сложнее чем таймер я сначало написал огромную кучу кода,
+// потом смотрю на ютубе как делают у видел что человек сделать пару строк кода
 
-moveRight();
+let interval = null
+let seconds = 0
+const reset = document.querySelector("#reset")
+const start = document.querySelector("#start")
+const stop = document.querySelector("#stop")
+const secondsValue = document.querySelector('#seconds')
 
+start.addEventListener('click', () => {
+  if (interval) return;
+
+  interval = setInterval(() => {
+    seconds++
+    secondsValue.innerText = seconds
+  }, 1000)
+})
+
+stop.addEventListener('click', () => {
+  clearInterval(interval)
+  interval = null
+})
+
+reset.addEventListener('click',() => {
+  clearInterval(interval)
+  interval = null
+  seconds = 0
+  secondsValue.innerText=seconds
+})
