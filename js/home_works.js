@@ -76,3 +76,31 @@ reset.addEventListener('click',() => {
   seconds = 0
   secondsValue.innerText=seconds
 })
+
+
+
+const characterList = document.querySelector('.characters-list');
+
+const request = new XMLHttpRequest();
+
+request.open('GET', '../data/characters.json');
+request.send();
+
+request.onload = () => {
+  const response = JSON.parse(request.responseText);
+
+  response.forEach((person) => {
+
+    const char = document.createElement("div");
+    char.classList.add("character-card");
+
+    char.innerHTML = `
+      <img src="${person.photo}" alt="${person.name}" class="character-photo">
+      <h3>${person.name}</h3>
+      <h4>${person.age}</h4>
+    `;
+
+    characterList.appendChild(char);
+
+  });
+}; // мне помогли я не разобрался
