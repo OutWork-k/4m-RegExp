@@ -99,8 +99,17 @@ request.onload = () => {
       <h3>${person.name}</h3>
       <h4>${person.age}</h4>
     `;
-
     characterList.appendChild(char);
-
   });
+
+  
+const requestBio = new XMLHttpRequest;
+requestBio.open('GET', ('../data/bio.json'))
+requestBio.setRequestHeader('Content-Type', 'application.json')
+requestBio.send();
+requestBio.onload=()=>{
+  const responseBio=JSON.parse(requestBio.responseText)
+  console.log(responseBio);
+  
+}
 }; // мне помогли я не разобрался
