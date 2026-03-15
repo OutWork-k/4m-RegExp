@@ -54,3 +54,48 @@ tabBtnsParent.addEventListener("click", (event) => {
         })
     }
 })
+
+
+const usdInput = document.querySelector("#usd")
+const somInput = document.querySelector("#som")
+const eurInput = document.querySelector("#eur")
+const errorMessage = document.querySelector("#error")
+
+const converter = (targetEl, otherEl, thirdEl) => {
+    targetEl.addEventListener("input",() => {
+    const request = new XMLHttpRequest();
+    request.open("GET", "../data/converter.json");
+    request.setRequestHeader('Content-type','application/json');
+    request.send();
+    request.onload = () => {
+        if (request.status === 404) {
+            errorMessage.style.color ="red"
+            errorMessage.innerHTML = "Произошла не предвиденная ошибка"
+        }
+        const response = JSON.parse(request.response);
+        const usd = response?.usd;
+        const eur = response?.eur;
+
+        if(targetEl.value === "") {
+            otherEl.value = "";
+            thirdEl.value = "";
+            return;
+        }
+        if (targetEl.id === "som") {
+            otherEl.value = (targetEl.value / usd).toFixed(2);
+            thirdEl.value = (targetEl.value / eur).toFixed(2);
+        } 
+        else if (targetEl.id === "usd") {
+            otherEl.value = (targetEl.value * usd).toFixed(2);
+            thirdEl.value = ((targetEl.value * usd) / eur).toFixed(2);
+        } 
+        else if (targetEl.id === "eur") {
+            otherEl.value = (targetEl.value * eur).toFixed(2);
+            thirdEl.value = ((targetEl.value * eur) / usd).toFixed(2);
+        }
+    }
+    })
+}
+converter(usdInput, somInput, eurInput)
+converter(somInput, usdInput, eurInput)
+converter(eurInput, somInput, usdInput)
