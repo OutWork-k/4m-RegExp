@@ -99,3 +99,66 @@ const converter = (targetEl, otherEl, thirdEl) => {
 converter(usdInput, somInput, eurInput)
 converter(somInput, usdInput, eurInput)
 converter(eurInput, somInput, usdInput)
+
+
+const btnNext = document.querySelector("#btn-next");
+const btnPrev = document.querySelector("#btn-prev");
+const card = document.querySelector(".card");
+
+const BASE_URL = "https://jsonplaceholder.typicode.com/todos/";
+let cardId = 1;
+
+const fetchTodos = (id) => {
+    fetch(BASE_URL + id)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("404 error");
+            }
+            return response.json();
+        })
+        .then(data => {
+            const { id, title, completed } = data;
+            const color = completed ? "green" : "red";
+
+            card.style.borderColor = color;
+            card.innerHTML = `
+                <p>ID -> ${id}</p>
+                <p>${title}</p>
+                <p style="color:${color}">
+                    ${completed ? "Fulfilled" : "Pending"}
+                </p>
+            `;
+        })
+        .catch(error => {
+            console.error(error);
+            card.innerHTML = `<p style="color:red">Error occured</p>`;
+        });
+};
+btnNext.addEventListener("click", () => {
+    cardId = cardId === 200 ? 1 : cardId + 1;
+    fetchTodos(cardId);
+});
+btnPrev.addEventListener("click", () => {
+    cardId = cardId === 1 ? 200 : cardId - 1;
+    fetchTodos(cardId);
+});
+fetchTodos(cardId);
+
+
+const ALBUMS_URL = "https://jsonplaceholder.typicode.com/albums";
+
+fetch(ALBUMS_URL)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Ошибка при получении albums");
+        }
+        return response.json();
+    })
+    .then(data => {
+        data.forEach(album => {
+            console.log(`ID: ${album.id}, Title: ${album.title}`);
+        });
+    })
+    .catch(error => {
+        console.error("Ошибка:", error);
+    });
