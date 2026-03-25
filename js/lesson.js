@@ -162,3 +162,15 @@ fetch(ALBUMS_URL)
     .catch(error => {
         console.error("Ошибка:", error);
     });
+
+
+const searchBtn = document.querySelector("#search")
+const searchInput = document.querySelector("#cityName")
+const cityName = document.querySelector(".city")
+const temperature = document.querySelector(".temp")
+
+searchBtn.addEventListener("click", () => {
+    fetch('https:api.openweathermap.org/data/2.5/weather')
+    .then(response => response.json())
+    .then(data => console.log(data))
+})
